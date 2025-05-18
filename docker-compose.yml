@@ -1,0 +1,57 @@
+# Không cần 'version', Docker Compose mới tự động hiểu
+services:
+  db:
+    image: postgres:17
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=odoo
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - odoo-net
+
+  odoo:
+    image: odoo:18.0
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    environment:
+      - HOST=db
+      - USER=odoo
+      - PASSWORD=odoo
+    volumes:
+      - ./addons:/mnt/extra-addons         
+      - ./config/odoo.conf:/etc/odoo/odoo.conf
+      - ./logs:/var/log/odoo
+      - odoo-web-data:/var/lib/odoo
+    tmpfs:
+      - /tmp
+    read_only: true
+    networks:
+      - odoo-net
+
+  backup:
+    image: alpine
+    volumes:
+      - postgres-data:/var/lib/postgresql/data:ro
+      - odoo-web-data:/var/lib/odoo:ro
+      - ./backups:/backups
+    entrypoint: >
+      /bin/sh -c "
+        mkdir -p /backups &&
+        tar czf /backups/backup_20250518_141535.tar.gz /var/lib/postgresql/data /var/lib/odoo
+      "
+    networks:
+      - odoo-net
+
+volumes:
+  postgres-data:
+  odoo-web-data:
+
+networks:
+  odoo-net:
+    driver: bridge
