@@ -1,0 +1,51 @@
+<odoo>
+  <!-- FORM VIEW -->
+  <record id="view_sample_template_finished_size_form" model="ir.ui.view">
+    <field name="name">sample_template.finished_size.form</field>
+    <field name="model">sample_template.finished_size</field>
+    <field name="arch" type="xml">
+      <form string="Finished Size Spreadsheet">
+        <header>
+          <!-- Nút Edit Spreadsheet -->
+          <button name="action_open_if_editable"
+                  string="Edit Spreadsheet"
+                  type="object"
+                  icon="fa-pencil"
+                  modifiers='{"invisible": [["is_editable", "=", False]]}'/>
+        </header>
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="creator_id" readonly="1"/>
+            <field name="is_editable"/>
+          </group>
+
+          <group string="Spreadsheet Access" groups="base.group_no_one">
+            <field name="contributor_ids" widget="many2many_tags"/>
+            <field name="contributor_group_ids" widget="many2many_tags"/>
+            <field name="reader_ids" widget="many2many_tags"/>
+            <field name="reader_group_ids" widget="many2many_tags"/>
+          </group>
+
+          <group string="Technical (Hidden)" invisible="1">
+            <field name="spreadsheet_binary_data" filename="filename"/>
+            <field name="filename" invisible="1"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- TREE VIEW -->
+  <record id="view_sample_template_finished_size_tree" model="ir.ui.view">
+    <field name="name">sample_template.finished_size.tree</field>
+    <field name="model">sample_template.finished_size</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name"/>
+        <field name="is_editable"/>
+        <button name="action_open_if_editable" type="object" icon="fa-pencil"/>
+      </tree>
+    </field>
+  </record>
+</odoo>

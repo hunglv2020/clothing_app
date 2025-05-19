@@ -1,0 +1,15 @@
+<odoo>
+  <data>
+    <!-- Root menu -->
+    <menuitem id="menu_material_warehouse_root" name="Material Warehouse" sequence="10"/>
+
+    <!-- Sub-menus -->
+    <menuitem id="menu_material_list" name="Materials"
+              parent="menu_material_warehouse_root"
+              action="action_material_list"/>
+
+    <menuitem id="menu_stock_list" name="Stock"
+              parent="menu_material_warehouse_root"
+              action="action_material_stock"/>
+  </data>
+</odoo>

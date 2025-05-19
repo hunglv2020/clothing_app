@@ -1,0 +1,13 @@
+<odoo>
+    <record id="action_material_list" model="ir.actions.act_window">
+        <field name="name">Materials</field>
+        <field name="res_model">material_warehouse.material</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_material_stock" model="ir.actions.act_window">
+        <field name="name">Material Stock</field>
+        <field name="res_model">material_warehouse.stock</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,51 @@
+<odoo>
+    <!-- Tree View: Material List -->
+    <record id="view_material_warehouse_material_tree" model="ir.ui.view">
+        <field name="name">material_warehouse.material.tree</field>
+        <field name="model">material_warehouse.material</field>
+        <field name="arch" type="xml">
+            <tree string="Materials">
+                <field name="name"/>
+                <field name="material_type"/>
+                <field name="color"/>
+                <field name="color_code"/>
+                <field name="specification"/>
+                <field name="unit"/>
+                <field name="default_price"/>
+                <field name="supplier"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View: Material Detail -->
+    <record id="view_material_warehouse_material_form" model="ir.ui.view">
+        <field name="name">material_warehouse.material.form</field>
+        <field name="model">material_warehouse.material</field>
+        <field name="arch" type="xml">
+            <form string="Material">
+                <sheet>
+                    <separator string="Basic Information"/>
+                    <group col="3">
+                        <group>
+                            <field name="name"/>
+                            <field name="material_type"/>
+                            <field name="unit"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="color"/>
+                            <field name="color_code"/>
+                            <field name="specification"/>
+                        </group>
+                        <group>
+                            <field name="default_price"/>
+                            <field name="supplier"/>
+                            <field name="note"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>
