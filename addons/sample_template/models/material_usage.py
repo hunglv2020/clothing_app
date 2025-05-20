@@ -7,7 +7,6 @@ class MaterialUsage(models.Model):
     specification_id = fields.Many2one('sample_template.specification', required=True, ondelete='cascade')
     material_id = fields.Many2one('material_warehouse.material', required=True)
 
-    # Copied fields (editable, lưu riêng)
     material_name = fields.Char(string="Material Name")
     material_type = fields.Selection([
         ('fabric', 'Fabric'),
@@ -48,14 +47,12 @@ class MaterialUsage(models.Model):
             self.supplier = m.supplier
             self.note = m.note
 
-            # Stock info (giả sử chỉ lấy từ 'Main Warehouse')
             stock = self.env['material_warehouse.stock'].search([
                 ('material_id', '=', m.id),
                 # ('location', 'ilike', 'Main Warehouse')
             ], limit=1)
             self.quantity_in_stock = stock.quantity if stock else 0.0
 
-            # Tự động set quantity_used nếu có số lượng mẫu
             if self.specification_id and self.specification_id.quantity:
                 self.quantity_used = self.specification_id.quantity
 

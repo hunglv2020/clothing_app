@@ -1,0 +1,38 @@
+<odoo>
+
+    <record id="view_operation_set_tree" model="ir.ui.view">
+        <field name="name">operation.set.tree</field>
+        <field name="model">sample_template.operation_set</field>
+        <field name="arch" type="xml">
+        <tree string="Operation Sets">
+            <field name="name"/>
+            <field name="note"/>
+        </tree>
+        </field>
+    </record>
+
+    <record id="view_operation_set_form" model="ir.ui.view">
+        <field name="name">operation.set.form</field>
+        <field name="model">sample_template.operation_set</field>
+        <field name="arch" type="xml">
+        <form string="Operation Set">
+            <sheet>
+            <group>
+                <field name="name"/>
+                <field name="note"/>
+            </group>
+            <separator string="Operation Lines"/>
+            <field name="operation_line_ids">
+                <tree editable="bottom">
+                <field name="name"/>
+                <field name="unit_price"/>
+                <field name="quantity"/>
+                <field name="note"/>
+                <field name="total" readonly="1"/>
+                </tree>
+            </field>
+            </sheet>
+        </form>
+        </field>
+    </record>
+</odoo>

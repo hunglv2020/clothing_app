@@ -1,8 +1,12 @@
 <odoo>
-  <data>
-    <menuitem id="menu_sample_template_root" name="Sample Templates" sequence="10"/>
+    <data>
 
-    <menuitem id="menu_specification" name="Specifications" parent="menu_sample_template_root" action="action_specification"/>
-    <menuitem id="menu_finished_size" name="Finished Size" parent="menu_sample_template_root" action="action_finished_size"/>
-  </data>
+        <menuitem id="menu_sample_template_root" name="Sample Templates" action="action_specification" sequence="10"/>
+
+        <menuitem id="menu_specification" name="Specifications" parent="menu_sample_template_root" action="action_specification"/>
+        
+        <menuitem id="menu_finished_size" name="Finished Size" parent="menu_specification" action="action_finished_size"/>
+        <menuitem id="menu_operation_set" name="Operation Sets" parent="menu_specification" action="action_operation_set"/>
+
+    </data>
 </odoo>

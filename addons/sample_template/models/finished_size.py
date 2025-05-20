@@ -18,7 +18,6 @@ class SampleTemplateFinishedSize(models.Model):
         ('unique_name', 'unique(name)', 'Finished Size name must be unique!'),
     ]
 
-    # Override để tránh lỗi bảng Many2many
     contributor_ids = fields.Many2many(
         "res.users",
         relation="finished_size_contributor_rel",
@@ -53,7 +52,14 @@ class SampleTemplateFinishedSize(models.Model):
         record = super().create(vals)
         if not record.spreadsheet_binary_data:
             record.spreadsheet_binary_data = record._empty_spreadsheet_data_base64()
+
+        spec_id = self.env.context.get('default_from_specification_id')
+        if spec_id:
+            spec = self.env['sample_template.specification'].browse(spec_id)
+            spec.finished_size_id = record.id
+
         return record
+
 
     def action_open_if_editable(self):
         self.ensure_one()

@@ -17,7 +17,7 @@
     ],
     # data files containing optionally loaded demonstration data
     'demo': [
-
+        "data/material_and_stock_demo.xml",
     ],
     'sequence': 1,
     'application': True,

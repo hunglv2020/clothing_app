@@ -67,24 +67,57 @@
                     </div>
 
                     <separator string="Materials Used" class="my-3"/>
+                        <field name="material_usage_ids">
+                            <tree editable="bottom">
+                                <field name="material_id"/>
+                                <field name="material_type" optional="show"/>
+                                <field name="color" optional="show"/>
+                                <field name="color_code" optional="show"/>
+                                <field name="specification" optional="show"/>
+                                <field name="unit" optional="show"/>
+                                <field name="default_price" optional="show"/>
+                                <field name="supplier" optional="show"/>
+                                <field name="note" optional="show"/>
+                                <field name="quantity_used"/>
+                                <field name="quantity_in_stock" readonly="1"/>
+                                <field name="total_cost" readonly="1"/>
+                            </tree>
+                        </field>
 
-                    <field name="material_usage_ids">
-                        <tree editable="bottom">
-                            <field name="material_id"/>
-                            <field name="material_type" optional="show"/>
-                            <field name="color" optional="show"/>
-                            <field name="color_code" optional="show"/>
-                            <field name="specification" optional="show"/>
-                            <field name="unit" optional="show"/>
-                            <field name="default_price" optional="show"/>
-                            <field name="supplier" optional="show"/>
-                            <field name="note" optional="show"/>
-                            <field name="quantity_used"/>
-                            <field name="quantity_in_stock" readonly="1"/>
-                            <field name="total_cost" readonly="1"/>
-                        </tree>
-                    </field>
-
+                    <separator string="Operation Steps" class="my-3"/>
+                        <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
+                            <field name="operation_set_id"
+                                class="flex-grow-1"
+                                options="{'no_create': True}"
+                                context="{'form_view_ref': 'sample_template.view_operation_set_form'}"
+                                placeholder="Select Operation Set Template..."/>
+                            <div class="d-flex flex-wrap gap-2">
+                                <button name="action_copy_operations_from_template"
+                                        type="object"
+                                        string="Copy from Template"
+                                        icon="fa-copy"
+                                        class="btn btn-secondary btn-sm"
+                                        modifiers='{"invisible": [["operation_set_id", "=", false]]}'/>
+                                <button name="action_prepare_new_operation_set"
+                                        type="object"
+                                        string="Save as New Operation Set"
+                                        icon="fa-save"
+                                        class="btn btn-primary btn-sm"/>
+                            </div>
+                        </div>
+                        <field name="operation_line_ids">
+                            <tree editable="bottom">
+                                <field name="name"/>
+                                <field name="unit_price"/>
+                                <field name="quantity"/>
+                                <field name="note"/>
+                                <field name="total" readonly="1"/>
+                                <button name="action_move_up" type="object" icon="fa-arrow-up"
+                                        string="Up" class="btn btn-outline-secondary btn-sm"/>
+                                <button name="action_move_down" type="object" icon="fa-arrow-down"
+                                        string="Down" class="btn btn-outline-secondary btn-sm"/>
+                            </tree>
+                        </field>
                 </sheet>
             </form>
         </field>

@@ -34,20 +34,35 @@ class SampleTemplateSpecification(models.Model):
         string="Materials Used"
     )
 
+    operation_set_id = fields.Many2one(
+        'sample_template.operation_set',
+        string="Operation Set (Template)",
+        help="Selecting a template will create a private editable copy below.",
+    )
+
+    operation_line_ids = fields.One2many(
+        'sample_template.operation_line',
+        'specification_id',
+        string="Operation Steps"
+    )
 
     def action_create_finished_size(self):
         self.ensure_one()
-        finished_size = self.env['sample_template.finished_size'].create({
-            'name': f"{self.name} - Finished Size [{uuid4().hex[:6]}]",
-        })
-        self.finished_size_id = finished_size.id
+        if self.finished_size_id:
+            raise UserError(_("Finished Size already exists."))
+
         return {
             'type': 'ir.actions.act_window',
             'res_model': 'sample_template.finished_size',
             'view_mode': 'form',
-            'res_id': finished_size.id,
             'target': 'new',
+            'context': {
+                'default_name': f"{self.name} - Finished Size [{uuid4().hex[:6]}]",
+                'default_creator_id': self.env.user.id,
+                'default_from_specification_id': self.id
+            },
         }
+
 
     def action_open_finished_size(self):
         self.ensure_one()
@@ -61,3 +76,46 @@ class SampleTemplateSpecification(models.Model):
             line.quantity_used = self.quantity or 0.0
 
 
+    def action_copy_operations_from_template(self):
+        self.ensure_one()
+        if not self.operation_set_id:
+            return
+
+        self.operation_line_ids.unlink()
+
+        for line in self.operation_set_id.operation_line_ids:
+            self.env['sample_template.operation_line'].create({
+                'specification_id': self.id,
+                'name': line.name,
+                'sequence': line.sequence,
+                'unit_price': line.unit_price,
+                'quantity': line.quantity,
+                'note': line.note,
+            })
+
+    def action_prepare_new_operation_set(self):
+        self.ensure_one()
+        if not self.operation_line_ids:
+            raise UserError("No operations to save.")
+
+        default_lines = []
+        for line in self.operation_line_ids:
+            default_lines.append((0, 0, {
+                'name': line.name,
+                'sequence': line.sequence,
+                'unit_price': line.unit_price,
+                'quantity': line.quantity,
+                'note': line.note,
+            }))
+
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'sample_template.operation_set',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_name': f"{self.name} - Ops [{uuid4().hex[:6]}]",
+                'default_note': f"Copied from specification: {self.name}",
+                'default_operation_line_ids': default_lines,
+            }
+        }
