@@ -174,10 +174,6 @@
                     <field name="process_requirements" widget="html" colspan="4" class="big-editor"/>
 
                     <separator string="Images" class="my-3"/>
-                    <button name="%(action_spec_image_select_wizard)d"
-                            type="action"
-                            string="Select Image"
-                            class="btn btn-sm btn-secondary mb-2"/>
                     
                     <div class="o_spec_image_container_wrap">
                         <field name="spec_image_ids" nolabel="1">
