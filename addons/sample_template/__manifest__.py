@@ -10,7 +10,6 @@
     'license': 'LGPL-3',
     # data files always loaded at installation
     'data': [
-        'wizards/spec_image_select_wizard.xml',
         "views/specification_view.xml",
         "views/finished_size_view.xml",
         'views/operation_set_view.xml',
