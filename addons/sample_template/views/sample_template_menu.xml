@@ -7,6 +7,15 @@
         
         <menuitem id="menu_finished_size" name="Finished Size" parent="menu_specification" action="action_finished_size"/>
         <menuitem id="menu_operation_set" name="Operation Sets" parent="menu_specification" action="action_operation_set"/>
+        <menuitem id="menu_other_cost_set" name="Other Cost Sets" parent="menu_specification" action="action_other_cost_set"/>
+        <menuitem id="menu_process_requirement_set" name="Process Requirement Sets" parent="menu_specification" action="action_process_requirement_set" sequence="40"/>
+
+        <menuitem id="menu_spec_image"
+                name="Specification Images"
+                parent="menu_specification"
+                action="action_spec_image"
+                sequence="50"/>
+
 
     </data>
 </odoo>

@@ -1,0 +1,53 @@
+/* ==== Editor Style ==== */
+.o_field_html.big-editor .note-editable {
+    min-height: 300px !important;
+}
+
+/* ==== Kanban View Styling for SpecImage ==== */
+.o_spec_image_kanban .o_spec_image_card {
+    width: 260px;
+    border-radius: 8px;
+    background-color: white;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    transition: transform 0.15s ease-in-out;
+}
+.o_spec_image_kanban .o_spec_image_card:hover {
+    transform: translateY(-2px);
+}
+
+.o_spec_image_kanban .o_spec_image_container {
+    height: 180px;
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.o_spec_image_kanban .o_spec_image_large img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+}
+
+.o_spec_image_preview img {
+    max-width: 100% !important;
+    max-height: 600px !important;
+    object-fit: contain !important;
+}
+
+/* ==== Kanban Horizontal Wrap Layout ==== */
+.horizontal-kanban.o_kanban_view .o_kanban_renderer {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 12px;
+    padding: 10px;
+}
+
+.horizontal-kanban .o_kanban_record {
+    width: 260px;
+    display: block !important;
+}
