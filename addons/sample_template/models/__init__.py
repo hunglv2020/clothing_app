@@ -3,3 +3,7 @@ from . import finished_size
 from . import material_usage
 from . import operation_set
 from . import operation_line
+from . import other_cost_set
+from . import other_cost_line
+from . import process_requirement_set
+from . import spec_image

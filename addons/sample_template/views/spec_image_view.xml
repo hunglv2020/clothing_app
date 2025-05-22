@@ -1,0 +1,72 @@
+<odoo>
+    <!-- Tree View -->
+    <record id="view_spec_image_tree" model="ir.ui.view">
+        <field name="name">sample_template.spec_image.tree</field>
+        <field name="model">sample_template.spec_image</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="specification_id"/>
+                <field name="image" widget="image"/>
+                <field name="note"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_spec_image_form" model="ir.ui.view">
+        <field name="name">sample_template.spec_image.form</field>
+        <field name="model">sample_template.spec_image</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="specification_id"/>
+                    </group>
+                    <group>
+                        <field name="image" widget="image" class="o_spec_image_preview"/>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="view_spec_image_kanban" model="ir.ui.view">
+        <field name="name">sample_template.spec_image.kanban</field>
+        <field name="model">sample_template.spec_image</field>
+        <field name="arch" type="xml">
+            <kanban class="o_spec_image_kanban" sample="1">
+                <field name="name"/>
+                <field name="note"/>
+                <field name="image"/>
+                <field name="specification_id"/>
+
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record_box o_spec_image_card shadow-sm">
+                            <div class="o_spec_image_container">
+                                <field name="image" widget="image" class="o_spec_image_large" options="{'zoom': true}"/>
+                            </div>
+                            <div class="px-2 pt-2 pb-1">
+                                <div class="o_kanban_record_title fw-bold text-truncate">
+                                    <field name="name" placeholder="Untitled"/>
+                                </div>
+                                <div class="text-muted small o_text_overflow">
+                                    <field name="note"/>
+                                </div>
+                                <div class="text-end small text-muted" t-if="record.specification_id.raw_value">
+                                    <i class="fa fa-link me-1"/><t t-esc="record.specification_id.value"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+</odoo>

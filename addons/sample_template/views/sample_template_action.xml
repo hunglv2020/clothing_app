@@ -17,5 +17,23 @@
         <field name="res_model">sample_template.operation_set</field>
         <field name="view_mode">tree,form</field>
     </record>
+
+    <record id="action_other_cost_set" model="ir.actions.act_window">
+        <field name="name">Other Cost Sets</field>
+        <field name="res_model">sample_template.other_cost_set</field>
+        <field name="view_mode">tree,form</field>
+    </record>
 	
+    <record id="action_process_requirement_set" model="ir.actions.act_window">
+        <field name="name">Process Requirement Sets</field>
+        <field name="res_model">sample_template.process_requirement_set</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_spec_image" model="ir.actions.act_window">
+        <field name="name">Specification Images</field>
+        <field name="res_model">sample_template.spec_image</field>
+        <field name="view_mode">kanban,tree,form</field>
+    </record>
+
 </odoo>

@@ -118,6 +118,98 @@
                                         string="Down" class="btn btn-outline-secondary btn-sm"/>
                             </tree>
                         </field>
+
+                    <separator string="Other Costs" class="my-3"/>
+                    <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
+                        <field name="other_cost_set_id"
+                            class="flex-grow-1"
+                            options="{'no_create': True}"
+                            placeholder="Select Other Cost Set..."/>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button name="action_copy_other_costs_from_set"
+                                    type="object"
+                                    string="Copy from Set"
+                                    icon="fa-copy"
+                                    class="btn btn-secondary btn-sm"
+                                    modifiers='{"invisible": [["other_cost_set_id", "=", false]]}'/>
+                            <button name="action_prepare_new_other_cost_set"
+                                    type="object"
+                                    string="Save as New Cost Set"
+                                    icon="fa-save"
+                                    class="btn btn-primary btn-sm"/>
+                        </div>
+                    </div>
+                    <field name="other_cost_line_ids">
+                        <tree editable="bottom">
+                            <field name="cost_name"/>
+                            <field name="cost_type"/>
+                            <field name="amount"/>
+                            <field name="invoice_date" optional="hide"/>
+                            <field name="vendor_id" optional="hide"/>
+                            <field name="ref_doc" optional="hide"/>
+                            <field name="note" optional="hide"/>
+                            <field name="is_estimated" widget="boolean_toggle" optional="hide"/>
+                            <field name="state" optional="hide"/>
+                        </tree>
+                    </field>
+                    <field name="total_other_cost" readonly="1" class="mt-2"/>
+                                
+                    <separator string="Process Requirements" class="my-3"/>
+                    <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
+                        <field name="process_requirement_set_id" class="flex-grow-1" options="{'no_create': True}" placeholder="Select Requirement Set..."/>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button name="action_copy_process_requirements_from_set"
+                                    type="object"
+                                    string="Copy from Set"
+                                    icon="fa-copy"
+                                    class="btn btn-secondary btn-sm"
+                                    modifiers='{"invisible": [["process_requirement_set_id", "=", false]]}'/>
+                            <button name="action_prepare_new_process_requirement_set"
+                                    type="object"
+                                    string="Save as New Set"
+                                    icon="fa-save"
+                                    class="btn btn-primary btn-sm"/>
+                        </div>
+                    </div>
+                    <field name="process_requirements" widget="html" colspan="4" class="big-editor"/>
+
+                    <separator string="Images" class="my-3"/>
+                    <button name="%(action_spec_image_select_wizard)d"
+                            type="action"
+                            string="Select Image"
+                            class="btn btn-sm btn-secondary mb-2"/>
+                    
+                    <div class="o_spec_image_container_wrap">
+                        <field name="spec_image_ids" nolabel="1">
+                            <kanban style="white-space: nowrap; overflow-x: auto; overflow-y: hidden; display: block;"
+                                    class="o_spec_image_kanban horizontal-kanban oe_kanban_sortable"
+                                    default_order="sequence"
+                                    data-record-sort-field="sequence">
+                                <field name="name"/>
+                                <field name="image"/>
+                                <field name="sequence"/>
+                                <templates>
+                                    <t t-name="kanban-box">
+                                        <div class="o_spec_image_card shadow-sm p-1 position-relative oe_kanban_global_click" type="open">
+                                            <field name="image"
+                                                   widget="image"
+                                                   class="o_spec_image_large"
+                                                   options="{'zoom': true}"/>
+                                            <div class="fw-bold mt-1">
+                                                <field name="name" placeholder="Untitled"/>
+                                            </div>
+                                            <button type="object"
+                                                    name="action_unlink_self_from_specification"
+                                                    class="btn btn-sm btn-light text-danger position-absolute top-0 end-0"
+                                                    title="Remove this image">
+                                                <i class="fa fa-chain-broken"/>
+                                            </button>
+                                        </div>
+                                    </t>
+                                </templates>
+                            </kanban>
+                        </field>
+                    </div>
                 </sheet>
             </form>
         </field>

@@ -119,3 +119,115 @@ class SampleTemplateSpecification(models.Model):
                 'default_operation_line_ids': default_lines,
             }
         }
+
+
+    other_cost_line_ids = fields.One2many(
+        'sample_template.other_cost_line',
+        'specification_id',
+        string='Other Costs'
+    )
+
+    other_cost_set_id = fields.Many2one(
+        'sample_template.other_cost_set',
+        string="Other Cost Set"
+    )
+
+    total_other_cost = fields.Float(
+        string="Total Other Cost",
+        compute="_compute_total_other_cost",
+        store=True
+    )
+
+    @api.depends('other_cost_line_ids.amount')
+    def _compute_total_other_cost(self):
+        for rec in self:
+            rec.total_other_cost = sum(line.amount for line in rec.other_cost_line_ids if line.active)
+
+    def action_copy_other_costs_from_set(self):
+        self.ensure_one()
+        if not self.other_cost_set_id:
+            return
+
+        self.other_cost_line_ids.unlink()
+
+        for line in self.other_cost_set_id.other_cost_line_ids:
+            self.env['sample_template.other_cost_line'].create({
+                'specification_id': self.id,
+                'cost_name': line.cost_name,
+                'cost_type': line.cost_type,
+                'amount': line.amount,
+                'invoice_date': line.invoice_date,
+                'vendor_id': line.vendor_id.id,
+                'ref_doc': line.ref_doc,
+                'note': line.note,
+                'is_estimated': line.is_estimated,
+                'sequence': line.sequence,
+                'state': line.state,
+            })
+
+    def action_prepare_new_other_cost_set(self):
+        self.ensure_one()
+        if not self.other_cost_line_ids:
+            raise UserError("No Other Costs to save.")
+
+        default_lines = []
+        for line in self.other_cost_line_ids:
+            default_lines.append((0, 0, {
+                'cost_name': line.cost_name,
+                'cost_type': line.cost_type,
+                'amount': line.amount,
+                'invoice_date': line.invoice_date,
+                'vendor_id': line.vendor_id.id,
+                'ref_doc': line.ref_doc,
+                'note': line.note,
+                'is_estimated': line.is_estimated,
+                'sequence': line.sequence,
+                'state': line.state,
+            }))
+
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'sample_template.other_cost_set',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_name': f"{self.name} - Cost Set",
+                'default_note': f"Saved from: {self.name}",
+                'default_other_cost_line_ids': default_lines,  # rất quan trọng
+            }
+        }
+
+
+    process_requirement_set_id = fields.Many2one(
+        'sample_template.process_requirement_set',
+        string="Process Requirement Set"
+    )
+
+    process_requirements = fields.Html(string="Process Requirements")
+
+    def action_copy_process_requirements_from_set(self):
+        self.ensure_one()
+        if self.process_requirement_set_id:
+            self.process_requirements = self.process_requirement_set_id.content
+
+    def action_prepare_new_process_requirement_set(self):
+        self.ensure_one()
+        if not self.process_requirements:
+            raise UserError("No content to save.")
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'sample_template.process_requirement_set',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_name': f"{self.name} - Process [{uuid4().hex[:6]}]",
+                'default_note': f"Saved from: {self.name}",
+                'default_content': self.process_requirements
+            }
+        }
+    
+    spec_image_ids = fields.One2many(
+        'sample_template.spec_image',
+        'specification_id',
+        string="Images"
+    )

@@ -1,0 +1,29 @@
+<odoo>
+    <record id="view_process_requirement_set_tree" model="ir.ui.view">
+        <field name="name">sample_template.process_requirement_set.tree</field>
+        <field name="model">sample_template.process_requirement_set</field>
+        <field name="arch" type="xml">
+            <tree string="Process Requirement Sets">
+                <field name="name"/>
+                <field name="note"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_process_requirement_set_form" model="ir.ui.view">
+        <field name="name">sample_template.process_requirement_set.form</field>
+        <field name="model">sample_template.process_requirement_set</field>
+        <field name="arch" type="xml">
+            <form string="Process Requirement Set">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="note"/>
+                    </group>
+                    <separator string="Requirement Content"/>
+                    <field name="content" widget="html" colspan="4" class="big-editor"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>
