@@ -10,9 +10,13 @@
     'license': 'LGPL-3',
     # data files always loaded at installation
     'data': [
+        'wizards/spec_image_select_wizard.xml',
         "views/specification_view.xml",
         "views/finished_size_view.xml",
-        'views/operation_set_views.xml',
+        'views/operation_set_view.xml',
+        'views/other_cost_set_view.xml',
+        'views/process_requirement_set_view.xml',
+        'views/spec_image_view.xml',
 
         "views/sample_template_action.xml",
         "views/sample_template_menu.xml",
@@ -22,6 +26,11 @@
     'demo': [
 
     ],
+    'assets': {
+        'web.assets_backend': [
+            "sample_template/static/src/scss/custom.scss",
+        ],
+    },
     'sequence': 1,
     'application': True,
 }
