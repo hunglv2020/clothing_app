@@ -39,8 +39,14 @@ export class FinishedSizeGridComponent extends Component {
                 columns,
                 data: rows,
                 pagination: true,
-                sort: true,
+                // sort: true,
                 resizable: true,
+                search: true,
+                style: { 
+                    table: { 
+                        'white-space': 'nowrap'
+                    }
+        },
             });
 
             grid.render(target);

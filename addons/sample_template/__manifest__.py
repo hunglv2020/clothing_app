@@ -10,6 +10,8 @@
     'license': 'LGPL-3',
     # data files always loaded at installation
     'data': [
+        "security/sample_template_security.xml",
+        "security/ir.model.access.csv",
         "views/specification_view.xml",
         "views/finished_size_view.xml",
         'views/operation_set_view.xml',

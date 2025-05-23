@@ -6,8 +6,6 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-
-
 class SampleTemplateFinishedSize(models.Model):
     _name = 'sample_template.finished_size'
     _inherit = 'spreadsheet.spreadsheet'

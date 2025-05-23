@@ -22,14 +22,13 @@ sample_template/
 │   │       └── mermaid.min.css
 │   └── src
 │       ├── components
-│       │   └── grid_demo
-│       │       ├── GridDemoClient.js
-│       │       └── GridDemoTemplate.xml
+│       │   └── grid_table
+│       │       ├── finished_size_grid_template.xml
+│       │       └── finished_size_grid_widget.js
 │       └── scss
 │           └── custom.scss
 └── views
     ├── finished_size_view.xml
-    ├── grid_demo_action.xml
     ├── operation_set_view.xml
     ├── other_cost_set_view.xml
     ├── process_requirement_set_view.xml
@@ -73,7 +72,6 @@ from . import models
 
         "views/sample_template_action.xml",
         "views/sample_template_menu.xml",
-        "views/grid_demo_action.xml"
 
     ],
     # data files containing optionally loaded demonstration data
@@ -87,8 +85,9 @@ from . import models
             'sample_template/static/lib/gridjs/gridjs.umd.js',
             'sample_template/static/lib/gridjs/mermaid.min.css',
 
-            'sample_template/static/src/components/grid_demo/GridDemoClient.js',
-            'sample_template/static/src/components/grid_demo/GridDemoTemplate.xml',
+            'sample_template/static/src/components/grid_table/*.js',
+            'sample_template/static/src/components/grid_table/*.xml',
+
         ],
     },
     'sequence': 1,
@@ -167,72 +166,85 @@ from . import models
 }
 ```
 
-## `static/src/components/grid_demo/GridDemoTemplate.xml`
-
-```xml
-<templates xml:space="preserve">
-  <t t-name="sample_template.GridDemoTemplate">
-    <div class="p-4">
-      <h2 class="mb-3">Finished Size Grid (Demo)</h2>
-      <div t-ref="gridContainer" id="gridjs-container"/>
-    </div>
-  </t>
-</templates>
-```
-
-## `static/src/components/grid_demo/GridDemoClient.js`
+## `static/src/components/grid_table/finished_size_grid_widget.js`
 
 ```javascript
 /** @odoo-module **/
 
 import { registry } from "@web/core/registry";
-import { Component, onMounted } from "@odoo/owl";
-import { useRef } from "@odoo/owl";
-import { rpc } from "@web/core/network/rpc_service";
+import { Component, onMounted, useRef } from "@odoo/owl";
+import { standardFieldProps } from "@web/views/fields/standard_field_props";
 
-class FinishedSizeGrid {
-    constructor({ target }) {
-        const data = [
-            ["S", 70, 100, 100, 100, 100, 100, 100],
-            ["M", 75, 102, 100, 100, 100, 100, 100],
-            ["L", 80, 104, 100, 100, 100, 100, 100],
-            ["L", 80, 104, 100, 100, 100, 100, 100],
-            ["L", 80, 104, 100, 100, 100, 100, 100],
-            ["L", 80, 104, 100, 100, 100, 100, 100],
-            ["L", 80, 104, 100, 100, 100, 100, 100],
-            ["L", 80, 104, 100, 100, 100, 100, 100],
-            ["L", 80, 104, 100, 100, 100, 100, 100],
-        ];
-
-        const grid = new window.gridjs.Grid({
-            columns: ["Size", "Waist", "Length"],
-            data,
-            pagination: true,
-            sort: true,
-        });
-
-        grid.render(target);
-    }
-}
-
-export class GridDemoClient extends Component {
-    static template = "sample_template.GridDemoTemplate";
+export class FinishedSizeGridComponent extends Component {
+    static template = "your_module.FinishedSizeGridComponent";
+    static props = { ...standardFieldProps };
 
     setup() {
-        this.gridContainer = useRef("gridContainer");
+        this.containerRef = useRef("gridContainer");
 
         onMounted(() => {
-            const target = this.gridContainer.el;
-            if (target) {
-                new FinishedSizeGrid({ target });
-            } else {
-                console.warn("gridContainer not found");
+            const target = this.containerRef.el;
+
+            // 🔍 Lấy giá trị từ record
+            const rawValue = this.props.record.data[this.props.name];
+            console.log("[GridJS] Raw value from record =", rawValue);
+
+            let matrix = [];
+            try {
+                matrix = rawValue ? JSON.parse(rawValue) : [];
+            } catch (e) {
+                console.warn("[GridJS] JSON parse failed:", e);
             }
+
+            console.log("[GridJS] Parsed matrix =", matrix);
+
+            if (!Array.isArray(matrix) || matrix.length < 2) {
+                console.warn("[GridJS] No valid matrix data.");
+                return;
+            }
+
+            const columns = matrix[0];
+            const rows = matrix.slice(1);
+
+            const grid = new window.gridjs.Grid({
+                columns,
+                data: rows,
+                pagination: true,
+                // sort: true,
+                resizable: true,
+                search: true,
+                style: { 
+                    table: { 
+                        'white-space': 'nowrap'
+                    }
+        },
+            });
+
+            grid.render(target);
         });
     }
 }
 
-registry.category("actions").add("grid_demo.client", GridDemoClient);
+export const FinishedSizeGridField = {
+    component: FinishedSizeGridComponent,
+    supportedTypes: ["text"],
+    extractProps: (props) => props,  // truyền toàn bộ context để lấy record + name
+};
+
+registry.category("fields").add("finished_size_grid", FinishedSizeGridField);
+```
+
+## `static/src/components/grid_table/finished_size_grid_template.xml`
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="your_module.FinishedSizeGridComponent" owl="1">
+        <div class="o_gridjs_widget p-3">
+            <div t-ref="gridContainer" class="o_gridjs_container" style="min-height: 300px;"/>
+        </div>
+    </t>
+</templates>
 ```
 
 ## `models/__init__.py`
@@ -717,8 +729,6 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-
-
 class SampleTemplateFinishedSize(models.Model):
     _name = 'sample_template.finished_size'
     _inherit = 'spreadsheet.spreadsheet'
@@ -814,24 +824,58 @@ class SampleTemplateFinishedSize(models.Model):
         if not self.spreadsheet_binary_data:
             return []
 
-        # Decode base64
-        raw_json_str = base64.b64decode(self.spreadsheet_binary_data).decode('utf-8')
-        raw = json.loads(raw_json_str)
+        # Decode base64 and parse JSON
+        try:
+            raw_json_str = base64.b64decode(self.spreadsheet_binary_data).decode('utf-8')
+            raw = json.loads(raw_json_str)
+        except Exception as e:
+            _logger.warning(f"[WARN] Failed to decode spreadsheet: {e}")
+            return []
 
         sheets = raw.get('sheets', [])
         if not sheets:
             return []
 
-        cells = sheets[0].get('cells', {})  # chỉ xử lý sheet đầu tiên
-        max_col_letter = 'D'
-        max_row = 5
+        cells = sheets[0].get('cells', {})
+        if not cells:
+            return []
 
+        # --- Tìm max row và max col ---
+        import re
+
+        def col_letter_to_index(col_letter):
+            result = 0
+            for c in col_letter:
+                result = result * 26 + (ord(c.upper()) - ord('A') + 1)
+            return result
+
+        max_row = 0
+        max_col_index = 0
+
+        for cell_key in cells:
+            match = re.match(r"([A-Z]+)(\d+)", cell_key)
+            if match:
+                col_letters, row_str = match.groups()
+                row = int(row_str)
+                col_index = col_letter_to_index(col_letters)
+
+                max_row = max(max_row, row)
+                max_col_index = max(max_col_index, col_index)
+
+        # --- Dựng matrix từ A1 tới max_col và max_row ---
         matrix = []
         for row_index in range(1, max_row + 1):
             row_data = []
-            for col_ascii in range(ord('A'), ord(max_col_letter) + 1):
-                key = f"{chr(col_ascii)}{row_index}"
-                cell = cells.get(key, {})
+            for col_index in range(1, max_col_index + 1):
+                # Convert col_index back to letter(s)
+                col = ""
+                idx = col_index
+                while idx > 0:
+                    idx, rem = divmod(idx - 1, 26)
+                    col = chr(65 + rem) + col
+
+                cell_key = f"{col}{row_index}"
+                cell = cells.get(cell_key, {})
                 value = cell.get('content', '')
                 row_data.append(value)
             matrix.append(row_data)
@@ -1172,8 +1216,7 @@ class OtherCostLine(models.Model):
                                 modifiers='{"invisible": [["finished_size_id", "!=", False]]}'/>
                     </div>
                     </div>
-                    <field name="finished_size_processed"/>
-
+                    <field name="finished_size_processed" widget="finished_size_grid"/>
 
                     <separator string="Materials Used" class="my-3"/>
                         <field name="material_usage_ids">
@@ -1424,23 +1467,6 @@ class OtherCostLine(models.Model):
         </field>
     </record>
     
-</odoo>
-```
-
-## `views/grid_demo_action.xml`
-
-```xml
-<odoo>
-  <record id="action_grid_demo" model="ir.actions.client">
-    <field name="name">Grid Demo</field>
-    <field name="tag">grid_demo.client</field>
-  </record>
-
-  <menuitem id="menu_grid_demo"
-            name="Grid Demo"
-            parent="menu_specification"
-            action="action_grid_demo"
-            sequence="99"/>
 </odoo>
 ```
 

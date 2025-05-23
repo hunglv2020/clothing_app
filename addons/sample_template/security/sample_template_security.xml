@@ -1,0 +1,24 @@
+<odoo>
+  <data noupdate="1">
+
+    <!-- Group: Admin (inherits base.group_system) -->
+    <record id="group_sample_admin" model="res.groups">
+      <field name="name">Sample Admin</field>
+      <field name="category_id" ref="base.module_category_hidden"/>
+      <field name="implied_ids" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+
+    <!-- Group: Management -->
+    <record id="group_sample_management" model="res.groups">
+      <field name="name">Sample Management</field>
+      <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+    <!-- Group: View Only -->
+    <record id="group_sample_view" model="res.groups">
+      <field name="name">Sample Viewer</field>
+      <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+  </data>
+</odoo>
