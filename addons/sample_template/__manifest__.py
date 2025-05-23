@@ -1,7 +1,7 @@
 {
     'name': "Sample Template",
     'version': '17.0',
-    'depends': ['base', 'hr', 'spreadsheet_oca', 'material_warehouse'],
+    'depends': ['base', 'hr', 'spreadsheet_oca', 'material_warehouse', 'base_setup', 'web'],
     'author': "Hung Le",
     'category': 'Category',
     'description': """
@@ -28,6 +28,13 @@
     'assets': {
         'web.assets_backend': [
             "sample_template/static/src/scss/custom.scss",
+            
+            'sample_template/static/lib/gridjs/gridjs.umd.js',
+            'sample_template/static/lib/gridjs/mermaid.min.css',
+
+            'sample_template/static/src/components/grid_table/*.js',
+            'sample_template/static/src/components/grid_table/*.xml',
+
         ],
     },
     'sequence': 1,

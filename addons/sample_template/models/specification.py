@@ -2,6 +2,7 @@ from odoo import models, fields, api
 from odoo.exceptions import UserError
 from odoo.tools.translate import _
 from uuid import uuid4
+import json
 
 class SampleTemplateSpecification(models.Model):
     _name = 'sample_template.specification'
@@ -233,3 +234,11 @@ class SampleTemplateSpecification(models.Model):
         'specification_id',
         string="Images"
     )
+
+    finished_size_processed = fields.Text(string="Processed Finished Size Table")
+
+    @api.onchange('finished_size_id')
+    def _onchange_finished_size_id(self):
+        for rec in self:
+            matrix = rec.finished_size_id.spreadsheet_data_processed or []
+            rec.finished_size_processed = json.dumps(matrix)  # giữ nguyên

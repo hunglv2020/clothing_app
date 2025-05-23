@@ -65,6 +65,7 @@
                                 modifiers='{"invisible": [["finished_size_id", "!=", False]]}'/>
                     </div>
                     </div>
+                    <field name="finished_size_processed" widget="finished_size_grid"/>
 
                     <separator string="Materials Used" class="my-3"/>
                         <field name="material_usage_ids">

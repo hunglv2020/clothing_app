@@ -1,0 +1,7 @@
+<templates xml:space="preserve">
+  <t t-name="your_module.FinishedSizeGridComponent" owl="1">
+    <div class="o_gridjs_widget p-3">
+      <div t-ref="gridContainer" class="o_gridjs_container" style="min-height: 300px;"/>
+    </div>
+  </t>
+</templates>
