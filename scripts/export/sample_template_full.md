@@ -89,9 +89,6 @@ from . import models
 
             'sample_template/static/src/components/grid_demo/GridDemoClient.js',
             'sample_template/static/src/components/grid_demo/GridDemoTemplate.xml',
-
-            "sample_template/static/src/components/finished_size_grid/FinishedSizeGrid.js",
-            "sample_template/static/src/components/finished_size_grid/FinishedSizeGridTemplate.xml",
         ],
     },
     'sequence': 1,
@@ -1176,6 +1173,7 @@ class OtherCostLine(models.Model):
                     </div>
                     </div>
                     <field name="finished_size_processed"/>
+
 
                     <separator string="Materials Used" class="my-3"/>
                         <field name="material_usage_ids">
