@@ -68,6 +68,8 @@ class SampleTemplateSpecification(models.Model):
         self.ensure_one()
         if not self.finished_size_id:
             raise UserError(_("Please select a Finished Size first."))
+        if not self.finished_size_id.is_editable:
+            raise UserError(_("Spreadsheet is locked."))
         return self.finished_size_id.open_spreadsheet()
 
     @api.onchange('quantity')
