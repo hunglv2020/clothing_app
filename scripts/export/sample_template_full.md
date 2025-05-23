@@ -824,6 +824,7 @@ class OtherCostLine(models.Model):
             </kanban>
         </field>
     </record>
+
 </odoo>
 ```
 
@@ -911,18 +912,6 @@ class OtherCostLine(models.Model):
         <field name="view_mode">kanban,tree,form</field>
     </record>
 
-    <record id="action_spec_image_assign_to_specification" model="ir.actions.server">
-        <field name="name">Assign to Specification</field>
-        <field name="model_id" ref="sample_template.model_sample_template_spec_image"/>
-        <field name="binding_model_id" ref="sample_template.model_sample_template_spec_image"/>
-        <field name="state">code</field>
-        <field name="binding_view_types">list</field>
-        <field name="code">
-            action = records.action_assign_to_specification()
-        </field>
-    </record>
-
-
 </odoo>
 ```
 
@@ -941,11 +930,11 @@ class OtherCostLine(models.Model):
         <menuitem id="menu_other_cost_set" name="Other Cost Sets" parent="menu_specification" action="action_other_cost_set"/>
         <menuitem id="menu_process_requirement_set" name="Process Requirement Sets" parent="menu_specification" action="action_process_requirement_set" sequence="40"/>
 
-<menuitem id="menu_spec_image"
-          name="Specification Images"
-          parent="menu_specification"
-          action="action_spec_image"
-          sequence="50"/>
+        <menuitem id="menu_spec_image"
+                name="Specification Images"
+                parent="menu_specification"
+                action="action_spec_image"
+                sequence="50"/>
 
 
     </data>
@@ -1131,7 +1120,7 @@ class OtherCostLine(models.Model):
                     <field name="process_requirements" widget="html" colspan="4" class="big-editor"/>
 
                     <separator string="Images" class="my-3"/>
-
+                    
                     <div class="o_spec_image_container_wrap">
                         <field name="spec_image_ids" nolabel="1">
                             <kanban style="white-space: nowrap; overflow-x: auto; overflow-y: hidden; display: block;"
