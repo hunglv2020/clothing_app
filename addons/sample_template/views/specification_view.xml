@@ -56,13 +56,15 @@
                                 string="Edit"
                                 icon="fa-pencil"
                                 class="btn btn-sm btn-primary"
-                                modifiers='{"invisible": [["finished_size_id", "=", False]]}'/>
+                                modifiers='{"invisible": [["finished_size_id", "=", False]]}'
+                                groups="sample_template.group_sample_admin,sample_template.group_sample_management"/>
                         <button name="action_create_finished_size"
                                 type="object"
                                 string="New"
                                 icon="fa-plus"
                                 class="btn btn-sm btn-secondary"
-                                modifiers='{"invisible": [["finished_size_id", "!=", False]]}'/>
+                                modifiers='{"invisible": [["finished_size_id", "!=", False]]}'
+                                groups="sample_template.group_sample_admin,sample_template.group_sample_management"/>
                     </div>
                     </div>
                     <field name="finished_size_processed" widget="finished_size_grid"/>
@@ -98,25 +100,30 @@
                                         string="Copy from Template"
                                         icon="fa-copy"
                                         class="btn btn-secondary btn-sm"
-                                        modifiers='{"invisible": [["operation_set_id", "=", false]]}'/>
+                                        modifiers='{"invisible": [["operation_set_id", "=", false]]}'
+                                        groups="sample_template.group_sample_admin,sample_template.group_sample_management"/>
                                 <button name="action_prepare_new_operation_set"
                                         type="object"
                                         string="Save as New Operation Set"
                                         icon="fa-save"
-                                        class="btn btn-primary btn-sm"/>
+                                        class="btn btn-primary btn-sm"
+                                        groups="sample_template.group_sample_admin,sample_template.group_sample_management"/>
                             </div>
                         </div>
                         <field name="operation_line_ids">
                             <tree editable="bottom">
+                                <field name="sequence" widget="handle"/>
                                 <field name="name"/>
                                 <field name="unit_price"/>
                                 <field name="quantity"/>
                                 <field name="note"/>
                                 <field name="total" readonly="1"/>
                                 <button name="action_move_up" type="object" icon="fa-arrow-up"
-                                        string="Up" class="btn btn-outline-secondary btn-sm"/>
+                                        string="Up" class="btn btn-outline-secondary btn-sm"
+                                        groups="sample_template.group_sample_admin,sample_template.group_sample_management"/>
                                 <button name="action_move_down" type="object" icon="fa-arrow-down"
-                                        string="Down" class="btn btn-outline-secondary btn-sm"/>
+                                        string="Down" class="btn btn-outline-secondary btn-sm"
+                                        groups="sample_template.group_sample_admin,sample_template.group_sample_management"/>
                             </tree>
                         </field>
 
@@ -132,12 +139,14 @@
                                     string="Copy from Set"
                                     icon="fa-copy"
                                     class="btn btn-secondary btn-sm"
-                                    modifiers='{"invisible": [["other_cost_set_id", "=", false]]}'/>
+                                    modifiers='{"invisible": [["other_cost_set_id", "=", false]]}'
+                                    groups="sample_template.group_sample_admin,sample_template.group_sample_management"/>
                             <button name="action_prepare_new_other_cost_set"
                                     type="object"
                                     string="Save as New Cost Set"
                                     icon="fa-save"
-                                    class="btn btn-primary btn-sm"/>
+                                    class="btn btn-primary btn-sm"
+                                    groups="sample_template.group_sample_admin,sample_template.group_sample_management"/>
                         </div>
                     </div>
                     <field name="other_cost_line_ids">
@@ -164,12 +173,14 @@
                                     string="Copy from Set"
                                     icon="fa-copy"
                                     class="btn btn-secondary btn-sm"
-                                    modifiers='{"invisible": [["process_requirement_set_id", "=", false]]}'/>
+                                    modifiers='{"invisible": [["process_requirement_set_id", "=", false]]}'
+                                    groups="sample_template.group_sample_admin,sample_template.group_sample_management"/>
                             <button name="action_prepare_new_process_requirement_set"
                                     type="object"
                                     string="Save as New Set"
                                     icon="fa-save"
-                                    class="btn btn-primary btn-sm"/>
+                                    class="btn btn-primary btn-sm"
+                                    groups="sample_template.group_sample_admin,sample_template.group_sample_management"/>
                         </div>
                     </div>
                     <field name="process_requirements" widget="html" colspan="4" class="big-editor"/>
@@ -198,7 +209,8 @@
                                             <button type="object"
                                                     name="action_unlink_self_from_specification"
                                                     class="btn btn-sm btn-light text-danger position-absolute top-0 end-0"
-                                                    title="Remove this image">
+                                                    title="Remove this image"
+                                                    groups="sample_template.group_sample_admin,sample_template.group_sample_management">
                                                 <i class="fa fa-chain-broken"/>
                                             </button>
                                         </div>

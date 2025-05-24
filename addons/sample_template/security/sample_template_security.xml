@@ -1,24 +1,31 @@
-<odoo>
-  <data noupdate="1">
+<odoo noupdate="1">
 
-    <!-- Group: Admin (inherits base.group_system) -->
-    <record id="group_sample_admin" model="res.groups">
-      <field name="name">Sample Admin</field>
-      <field name="category_id" ref="base.module_category_hidden"/>
-      <field name="implied_ids" eval="[(4, ref('base.group_system'))]"/>
-    </record>
+  <record id="module_category_sample_template" model="ir.module.category">
+    <field name="name">Sample Template</field>
+    <field name="sequence">40</field>
+  </record>
 
-    <!-- Group: Management -->
-    <record id="group_sample_management" model="res.groups">
-      <field name="name">Sample Management</field>
-      <field name="category_id" ref="base.module_category_hidden"/>
-    </record>
+  <record id="group_sample_super_user" model="res.groups">
+    <field name="name">Sample Super User</field>
+    <field name="category_id" ref="sample_template.module_category_sample_template"/>
+    <field name="users" eval="[(4, ref('base.user_root'))]"/>
+    <field name="implied_ids" eval="[(4, ref('sample_template.group_sample_admin'))]"/>
+  </record>
 
-    <!-- Group: View Only -->
-    <record id="group_sample_view" model="res.groups">
-      <field name="name">Sample Viewer</field>
-      <field name="category_id" ref="base.module_category_hidden"/>
-    </record>
+  <record id="group_sample_admin" model="res.groups">
+    <field name="name">Sample Admin</field>
+    <field name="category_id" ref="sample_template.module_category_sample_template"/>
+    <field name="implied_ids" eval="[(4, ref('base.group_system'))]"/>
+  </record>
 
-  </data>
+  <record id="group_sample_management" model="res.groups">
+    <field name="name">Sample Management</field>
+    <field name="category_id" ref="sample_template.module_category_sample_template"/>
+  </record>
+
+  <record id="group_sample_view" model="res.groups">
+    <field name="name">Sample Viewer</field>
+    <field name="category_id" ref="sample_template.module_category_sample_template"/>
+  </record>
+
 </odoo>

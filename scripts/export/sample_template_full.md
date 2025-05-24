@@ -15,6 +15,9 @@ sample_template/
 │   ├── process_requirement_set.py
 │   ├── spec_image.py
 │   └── specification.py
+├── security
+│   ├── ir.model.access.csv
+│   └── sample_template_security.xml
 ├── static
 │   ├── lib
 │   │   └── gridjs
@@ -63,6 +66,8 @@ from . import models
     'license': 'LGPL-3',
     # data files always loaded at installation
     'data': [
+        "security/sample_template_security.xml",
+        "security/ir.model.access.csv",
         "views/specification_view.xml",
         "views/finished_size_view.xml",
         'views/operation_set_view.xml',
@@ -1207,13 +1212,15 @@ class OtherCostLine(models.Model):
                                 string="Edit"
                                 icon="fa-pencil"
                                 class="btn btn-sm btn-primary"
-                                modifiers='{"invisible": [["finished_size_id", "=", False]]}'/>
+                                modifiers='{"invisible": [["finished_size_id", "=", False]]}'
+                                groups="sample_template.group_sample_admin,sample_template.group_sample_management"/>
                         <button name="action_create_finished_size"
                                 type="object"
                                 string="New"
                                 icon="fa-plus"
                                 class="btn btn-sm btn-secondary"
-                                modifiers='{"invisible": [["finished_size_id", "!=", False]]}'/>
+                                modifiers='{"invisible": [["finished_size_id", "!=", False]]}'
+                                groups="sample_template.group_sample_admin,sample_template.group_sample_management"/>
                     </div>
                     </div>
                     <field name="finished_size_processed" widget="finished_size_grid"/>
@@ -1249,25 +1256,30 @@ class OtherCostLine(models.Model):
                                         string="Copy from Template"
                                         icon="fa-copy"
                                         class="btn btn-secondary btn-sm"
-                                        modifiers='{"invisible": [["operation_set_id", "=", false]]}'/>
+                                        modifiers='{"invisible": [["operation_set_id", "=", false]]}'
+                                        groups="sample_template.group_sample_admin,sample_template.group_sample_management"/>
                                 <button name="action_prepare_new_operation_set"
                                         type="object"
                                         string="Save as New Operation Set"
                                         icon="fa-save"
-                                        class="btn btn-primary btn-sm"/>
+                                        class="btn btn-primary btn-sm"
+                                        groups="sample_template.group_sample_admin,sample_template.group_sample_management"/>
                             </div>
                         </div>
                         <field name="operation_line_ids">
                             <tree editable="bottom">
+                                <field name="sequence" widget="handle"/>
                                 <field name="name"/>
                                 <field name="unit_price"/>
                                 <field name="quantity"/>
                                 <field name="note"/>
                                 <field name="total" readonly="1"/>
                                 <button name="action_move_up" type="object" icon="fa-arrow-up"
-                                        string="Up" class="btn btn-outline-secondary btn-sm"/>
+                                        string="Up" class="btn btn-outline-secondary btn-sm"
+                                        groups="sample_template.group_sample_admin,sample_template.group_sample_management"/>
                                 <button name="action_move_down" type="object" icon="fa-arrow-down"
-                                        string="Down" class="btn btn-outline-secondary btn-sm"/>
+                                        string="Down" class="btn btn-outline-secondary btn-sm"
+                                        groups="sample_template.group_sample_admin,sample_template.group_sample_management"/>
                             </tree>
                         </field>
 
@@ -1283,12 +1295,14 @@ class OtherCostLine(models.Model):
                                     string="Copy from Set"
                                     icon="fa-copy"
                                     class="btn btn-secondary btn-sm"
-                                    modifiers='{"invisible": [["other_cost_set_id", "=", false]]}'/>
+                                    modifiers='{"invisible": [["other_cost_set_id", "=", false]]}'
+                                    groups="sample_template.group_sample_admin,sample_template.group_sample_management"/>
                             <button name="action_prepare_new_other_cost_set"
                                     type="object"
                                     string="Save as New Cost Set"
                                     icon="fa-save"
-                                    class="btn btn-primary btn-sm"/>
+                                    class="btn btn-primary btn-sm"
+                                    groups="sample_template.group_sample_admin,sample_template.group_sample_management"/>
                         </div>
                     </div>
                     <field name="other_cost_line_ids">
@@ -1315,12 +1329,14 @@ class OtherCostLine(models.Model):
                                     string="Copy from Set"
                                     icon="fa-copy"
                                     class="btn btn-secondary btn-sm"
-                                    modifiers='{"invisible": [["process_requirement_set_id", "=", false]]}'/>
+                                    modifiers='{"invisible": [["process_requirement_set_id", "=", false]]}'
+                                    groups="sample_template.group_sample_admin,sample_template.group_sample_management"/>
                             <button name="action_prepare_new_process_requirement_set"
                                     type="object"
                                     string="Save as New Set"
                                     icon="fa-save"
-                                    class="btn btn-primary btn-sm"/>
+                                    class="btn btn-primary btn-sm"
+                                    groups="sample_template.group_sample_admin,sample_template.group_sample_management"/>
                         </div>
                     </div>
                     <field name="process_requirements" widget="html" colspan="4" class="big-editor"/>
@@ -1349,7 +1365,8 @@ class OtherCostLine(models.Model):
                                             <button type="object"
                                                     name="action_unlink_self_from_specification"
                                                     class="btn btn-sm btn-light text-danger position-absolute top-0 end-0"
-                                                    title="Remove this image">
+                                                    title="Remove this image"
+                                                    groups="sample_template.group_sample_admin,sample_template.group_sample_management">
                                                 <i class="fa fa-chain-broken"/>
                                             </button>
                                         </div>
@@ -1468,5 +1485,74 @@ class OtherCostLine(models.Model):
     </record>
     
 </odoo>
+```
+
+## `security/sample_template_security.xml`
+
+```xml
+<odoo noupdate="1">
+
+  <record id="module_category_sample_template" model="ir.module.category">
+    <field name="name">Sample Template</field>
+    <field name="sequence">40</field>
+  </record>
+
+  <record id="group_sample_super_user" model="res.groups">
+    <field name="name">Sample Super User</field>
+    <field name="category_id" ref="sample_template.module_category_sample_template"/>
+    <field name="users" eval="[(4, ref('base.user_root'))]"/>
+    <field name="implied_ids" eval="[(4, ref('sample_template.group_sample_admin'))]"/>
+  </record>
+
+  <record id="group_sample_admin" model="res.groups">
+    <field name="name">Sample Admin</field>
+    <field name="category_id" ref="sample_template.module_category_sample_template"/>
+    <field name="implied_ids" eval="[(4, ref('base.group_system'))]"/>
+  </record>
+
+  <record id="group_sample_management" model="res.groups">
+    <field name="name">Sample Management</field>
+    <field name="category_id" ref="sample_template.module_category_sample_template"/>
+  </record>
+
+  <record id="group_sample_view" model="res.groups">
+    <field name="name">Sample Viewer</field>
+    <field name="category_id" ref="sample_template.module_category_sample_template"/>
+  </record>
+
+</odoo>
+```
+
+## `security/ir.model.access.csv`
+
+```csv
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sample_template_specification_admin,sample_template.specification,model_sample_template_specification,sample_template.group_sample_admin,1,1,1,1
+access_sample_template_specification_management,sample_template.specification,model_sample_template_specification,sample_template.group_sample_management,1,1,1,0
+access_sample_template_specification_view,sample_template.specification,model_sample_template_specification,sample_template.group_sample_view,1,0,0,0
+access_sample_template_finished_size_admin,sample_template.finished_size,model_sample_template_finished_size,sample_template.group_sample_admin,1,1,1,1
+access_sample_template_finished_size_management,sample_template.finished_size,model_sample_template_finished_size,sample_template.group_sample_management,1,1,1,0
+access_sample_template_finished_size_view,sample_template.finished_size,model_sample_template_finished_size,sample_template.group_sample_view,1,0,0,0
+access_sample_template_material_usage_admin,sample_template.material_usage,model_sample_template_material_usage,sample_template.group_sample_admin,1,1,1,1
+access_sample_template_material_usage_management,sample_template.material_usage,model_sample_template_material_usage,sample_template.group_sample_management,1,1,1,0
+access_sample_template_material_usage_view,sample_template.material_usage,model_sample_template_material_usage,sample_template.group_sample_view,1,0,0,0
+access_sample_template_operation_line_admin,sample_template.operation_line,model_sample_template_operation_line,sample_template.group_sample_admin,1,1,1,1
+access_sample_template_operation_line_management,sample_template.operation_line,model_sample_template_operation_line,sample_template.group_sample_management,1,1,1,0
+access_sample_template_operation_line_view,sample_template.operation_line,model_sample_template_operation_line,sample_template.group_sample_view,1,0,0,0
+access_sample_template_operation_set_admin,sample_template.operation_set,model_sample_template_operation_set,sample_template.group_sample_admin,1,1,1,1
+access_sample_template_operation_set_management,sample_template.operation_set,model_sample_template_operation_set,sample_template.group_sample_management,1,1,1,0
+access_sample_template_operation_set_view,sample_template.operation_set,model_sample_template_operation_set,sample_template.group_sample_view,1,0,0,0
+access_sample_template_other_cost_line_admin,sample_template.other_cost_line,model_sample_template_other_cost_line,sample_template.group_sample_admin,1,1,1,1
+access_sample_template_other_cost_line_management,sample_template.other_cost_line,model_sample_template_other_cost_line,sample_template.group_sample_management,1,1,1,0
+access_sample_template_other_cost_line_view,sample_template.other_cost_line,model_sample_template_other_cost_line,sample_template.group_sample_view,1,0,0,0
+access_sample_template_other_cost_set_admin,sample_template.other_cost_set,model_sample_template_other_cost_set,sample_template.group_sample_admin,1,1,1,1
+access_sample_template_other_cost_set_management,sample_template.other_cost_set,model_sample_template_other_cost_set,sample_template.group_sample_management,1,1,1,0
+access_sample_template_other_cost_set_view,sample_template.other_cost_set,model_sample_template_other_cost_set,sample_template.group_sample_view,1,0,0,0
+access_sample_template_process_requirement_set_admin,sample_template.process_requirement_set,model_sample_template_process_requirement_set,sample_template.group_sample_admin,1,1,1,1
+access_sample_template_process_requirement_set_management,sample_template.process_requirement_set,model_sample_template_process_requirement_set,sample_template.group_sample_management,1,1,1,0
+access_sample_template_process_requirement_set_view,sample_template.process_requirement_set,model_sample_template_process_requirement_set,sample_template.group_sample_view,1,0,0,0
+access_sample_template_spec_image_admin,sample_template.spec_image,model_sample_template_spec_image,sample_template.group_sample_admin,1,1,1,1
+access_sample_template_spec_image_management,sample_template.spec_image,model_sample_template_spec_image,sample_template.group_sample_management,1,1,1,0
+access_sample_template_spec_image_view,sample_template.spec_image,model_sample_template_spec_image,sample_template.group_sample_view,1,0,0,0
 ```
 
